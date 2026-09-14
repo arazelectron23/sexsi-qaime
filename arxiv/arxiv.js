@@ -29,25 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Bu günkü tarix
-    const now = new Date();
-    
-    // 1 ay bundan əvvəlki tarix
-    const oneMonthAgo = new Date();
-    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-
     if (window.flatpickr) {
-        // Başlanğıc tarixi: 1 ay əvvəl
-        window.flatpickr("#start-date", {
-            ...fpConfig,
-            defaultDate: oneMonthAgo
-        });
-
-        // Bitiş tarixi: Bu gün
-        window.flatpickr("#end-date", {
-            ...fpConfig,
-            defaultDate: now
-        });
+        // Tarixləri avtomatik doldurmadan sadəcə flatpickr-i aktivləşdiririk (başlanğıcda boş qalacaq)
+        window.flatpickr("#start-date", fpConfig);
+        window.flatpickr("#end-date", fpConfig);
     }
 
     fetchArchiveList();
