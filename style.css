@@ -29,17 +29,17 @@ body {
    BLOKU ENİNƏ 600PX SAXLAYIB DAHA DA YAXINLAŞDIRAN KONTEYNER (ZOOM)
    ========================================================================= */
 .app-container {
-    max-width: 530px !important;
+    max-width: 550px !important;
     width: 100% !important;
     
     /* Mərkəzləşdirmək üçün margin-i auto edirik */
     margin: 20px auto !important; 
-    transform: translateX(-38px) ; /* Mərkəzləşdirmək üçün əlavə transform */
+    transform: translateX(-10px) ; /* Mərkəzləşdirmək üçün əlavə transform */
     
 
     /* Yaxınlaşdırma dərəcəsi və mərkəz nöqtəsi */
-    zoom: 1.6 !important;
-    -moz-transform: scale(1.6);
+    zoom: 1.7 !important;
+    -moz-transform: scale(1.7);
     -moz-transform-origin: top center; /* Miqyaslanmanın mərkəzdən başlaması üçün */
 }
 
@@ -443,11 +443,11 @@ body {
     }
 
 .app-container {
-    max-width: 550px !important;
+    max-width: 600px !important;
     width: 100% !important;
     
     /* Səhifədə tam mərkəzə salır */
-    margin: 20px auto !important; 
+    margin: 80px auto !important; 
     
     /* Daxili elementləri mərkəzləşdirir */
     display: flex;
@@ -455,8 +455,8 @@ body {
     align-items: center;
 
     /* Yaxınlaşdırma və miqyaslama */
-    zoom: 1.7 !important;
-    -moz-transform: scale(1.7);
+    zoom: 1.8 !important;
+    -moz-transform: scale(1.8);
     -moz-transform-origin: top center;
 }
 
