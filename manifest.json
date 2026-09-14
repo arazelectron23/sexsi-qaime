@@ -1,0 +1,19 @@
+{
+  "short_name": "Qaime Səxsi",
+  "name": "Satış Qaimə",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "favicon.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "scope": "/cosqun-qaime/",
+  "start_url": "/cosqun-qaime/index.html",
+  "display": "standalone"
+}

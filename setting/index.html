@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Parametr - Qaime</title>
+    <link rel="icon" type="image/png" href="../favicon.png">
+    <link rel="stylesheet" href="./settings.css?v=102.1">
+</head>
+<body>
+
+    <div class="main-settings-wrapper">
+    <!-- Geri Qayıtmaq üçün Başlıq -->
+   <div class="settings-header" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+    <h2>⚙️ Məhsulları idarə et</h2>
+    <div style="display: flex; gap: 10px; align-items: center; justify-content: center; margin-top: 10px;">
+        <a href="../index.html" class="btn-back" id="btn-back-home">← Ana Səhifə</a>
+        <a href="../arxiv/index.html" class="btn-back" style="background-color: #334155;">📦 Qaimə Arxiv</a>
+    </div>
+</div>
+
+      <div class="compact-settings-stack">
+            
+            <!-- SOL TƏRƏF: MƏHSUL BAZASI -->
+            <div class="compact-box">
+                <h3>📦 Məhsul Əlavə Et</h3>
+                <form id="product-form" class="settings-form">
+                    <input type="text" id="setting-item-name" placeholder="Məhsulun adı..." required autocomplete="off">
+                    <input type="number" id="setting-item-price" placeholder="Qiyməti..." step="0.01" required autocomplete="off">
+                    <button type="submit" class="btn-save">Məhsulu Bazaya Yaz</button>
+                </form>
+
+                <h4 id="toggle-products-header" style="margin-top: 20px; color: #5bc0be; cursor: pointer; display: flex; align-items: center; justify-content: space-between; user-select: none;">
+                    Məhsul Bazası
+                    <span id="header-arrow" style="transition: transform 0.3s ease; display: inline-flex; align-items: center; justify-content: center;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5bc0be" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                        
+                    </span>
+                </h4>
+                <div class="list-wrapper" id="base-products-list"></div>
+            </div>
+
+           <!-- SAĞ TƏRƏF: ŞABLON YARADICISI -->
+<div class="compact-box">
+    <h3>📋 Yeni Şablon Yarat</h3>
+    <form id="template-form" class="settings-form">
+        <input type="text" id="template-name" placeholder="Şablonun adı..." required autocomplete="off">
+        
+        <h4 id="toggle-template-header" style="margin-top: 20px; color: #5bc0be; cursor: pointer; display: flex; align-items: center; justify-content: space-between; user-select: none;">
+            Məhsulları seçin
+            <span id="template-arrow" style="transition: transform 0.3s ease; display: inline-flex; align-items: center; justify-content: center;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5bc0be" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </span>
+        </h4>
+
+        <!-- Məhsulların siyahısı bura yüklənəcək -->
+        <div class="checkbox-group" id="template-products-selector"></div>
+
+        <button type="submit" class="btn-save" style="background-color: #2e70fb; color: #ffff;">Şablonu Yadda Saxla</button>
+    </form>
+
+    <h4 style="margin-top: 20px; color: #5bc0be;">Mövcud Şablonlar</h4>
+    <div class="list-wrapper" id="base-templates-list"></div>
+</div>
+
+            <!-- XÜSUSİ ŞABLONLAR QUTUSU (Artıq yuxarıdakı stack daxilindədir) -->
+            <div class="compact-box custom-templates-card">
+                <div id="custom-templates-settings-list" class="custom-templates-list">
+                    <!-- Dinamik olaraq bura gələcək -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ŞABLON REDAKTƏ MODALI (POPUP) -->
+    <div id="template-modal" class="custom-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Şablonu Redaktə Et</h3>
+                <button class="modal-close-btn" onclick="closeTemplateModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="modal-template-id">
+                
+                <div class="modal-field-group">
+                    <label for="modal-template-name">Şablonun Adı</label>
+                    <input type="text" id="modal-template-name" placeholder="Şablonun adını yazın..." autocomplete="off">
+                </div>
+
+                <div class="modal-field-group">
+                    <label>Şablondakı Məhsullar</label>
+                    <div id="modal-template-checkboxes" class="modal-checkbox-list">
+                        <!-- Dinamik məhsullar bura yüklənir -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-modal-cancel" onclick="closeTemplateModal()">Ləğv et</button>
+                <button class="btn-modal-save" onclick="saveTemplateModalFromModal()">💾 Saxla</button>
+            </div>
+        </div>
+    </div>
+
+<!-- Yeni Şablon Təsdiq Modalı -->
+<div id="new-template-modal" class="custom-modal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Yeni Şablonu Təsdiq Et</h3>
+            <button type="button" class="modal-close-btn" onclick="closeNewTemplateModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-field-group">
+                <label>Şablonun Adı</label>
+                <input type="text" id="confirm-template-name" readonly style="background: #121222; color: #5bc0be; font-weight: bold;">
+            </div>
+            <div class="modal-field-group">
+                <label>Seçilmiş Məhsullar və Sayları</label>
+                <div id="confirm-template-checkboxes" class="modal-checkbox-list">
+                    <!-- Dinamik olaraq seçilmiş məhsullar dolacaq -->
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn-modal-cancel" onclick="closeNewTemplateModal()">Ləğv et</button>
+            <button type="button" class="btn-modal-save" onclick="finalizeNewTemplate()">💾 Yadda Saxla</button>
+        </div>
+    </div>
+</div>
+
+    <script type="module" src="./settings.js?v=5"></script>
+</body>
+</html>

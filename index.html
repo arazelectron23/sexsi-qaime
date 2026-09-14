@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="az">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, initial-scale=0.4, maximum-scale=1.0, user-scalable=no">
+    <link rel="manifest" href="manifest.json?v=2">
+    <title>Qaime Şəxsi</title>
+    <link rel="stylesheet" href="./style.css?v=21.2">
+    <link rel="icon" type="image/png" href="./favicon.png?v=3">
+    <link rel="shortcut icon" type="image/png" href="./favicon.png?v=3">
+
+    <!-- Azərbaycan hərflərinin (ə, ğ, ı, ş, ç, ö, ü) PDF/Şəkildə düzgün və tam görünməsi üçün xüsusi font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+</head>
+
+<body>
+
+   
+
+    <div class="app-container">
+        <!-- Üst İdarəetmə Paneli -->
+        <div class="control-panel">
+            <input type="text" id="customer-input" placeholder="Müştəri adı..." autocomplete="off"> 
+            <div class="actions">
+                <button class="btnNewInvoice" id="btn-new-invoice">Yeni+</button>
+                <button class="btn btn-yellow" id="btn-waiting">Gözləməyə Al</button>
+
+                <!-- PDF yaradıb paylaşacaq düymə -->
+                <button class="btn-share-style" id="btn-share-pdf">Paylaş</button>
+            </div>
+        </div>
+
+       <div class="invoice-date-archive-wrapper">
+    <div class="invoice-date-group">
+        <label for="invoice-date-input">Qaimə Tarixi:</label>
+        <input type="date" id="invoice-date-input">
+    </div>
+    <button type="button" id="btn-open-archive-modal">
+        Arxivdən gətir
+    </button>
+</div>
+
+       <!-- Sürətli Şablon Seçimi bölməsi -->
+<div class="template-selector-container">
+    <label class="template-label">📋 Sürətli Şablon Seçin:</label>
+    
+    <div class="template-inline-row">
+        <!-- Dropdown əvəzinə açılan peşəkar modal trigger düyməsi -->
+        <button type="button" id="open-template-modal-btn" class="template-select-trigger-btn">
+            <span id="selected-template-text">-- Şablon seçilməyib --</span>
+            <span>📂</span>
+        </button>
+        <button type="button" id="open-save-template-modal-btn" class="btn-save-template-mini">
+            Yadda saxla
+        </button>
+    </div>
+</div>
+        <div class="main-content">
+            <!-- Sol tərəf: Daxiletmə və Cədvəl -->
+            <div class="invoice-box">
+                <div class="invoice-table-wrapper" style="position: relative;">
+                    <table class="invoice-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%;">#</th>
+                                <th style="width: 50%;">Məhsulun Adı</th>
+                                <th style="width: 15%;">Miqdar</th>
+                                <th style="width: 15%;">Qiymət</th>
+                                <th style="width: 10%;">Cəmi</th>
+                                <th style="width: 5%;">Sil</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invoice-items-body">
+                            <!-- Dinamik sətirlər -->
+                        </tbody>
+                    </table>
+
+                    <!-- Sürətli məhsul seçimi dropdown paneli -->
+                    <div id="custom-dropdown" class="custom-dropdown" style="display: none;"></div>
+                </div>
+
+                <button class="btn-new-row-style" id="btn-add-item">+ Yeni Mal Əlavə Et</button>
+
+                <div class="invoice-footer">
+                    <div class="total-amount">Yekun Ödəniş: <span id="total-price-view">0.00</span> AZN</div>
+                </div>
+            </div>
+
+            <!-- Sağ tərəf: Gözləmə Paneli -->
+            <div class="waiting-panel">
+                <div class="panel-header">
+                    <h3>Gözləyən Qaimələr</h3>
+                    <input type="text" id="waiting-search-input" placeholder="Axtar..." autocomplete="off">
+                    <div class="panel-header-buttons">
+                        <button id="btn-refresh" class="btn-refresh">Yenilə</button>
+                        <a href="setting/" id="btn-settings" class="btn-settings">⚙️ Parametr</a>
+                    </div>
+                </div>
+                <div class="waiting-list" id="waiting-list-container">
+                    <!-- Gözləyən siyahı -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Şablon Adı Üçün Mərkəzi Modal Pəncərə -->
+    <div id="template-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h3>Şablon üçün ad daxil edin</h3>
+            <input type="text" id="modal-template-name-input" placeholder="Məsələn: Dunyamalılar" autocomplete="off" />
+            <div class="modal-buttons">
+                <button type="button" id="modal-cancel-btn" class="btn-secondary">Ləğv et</button>
+                <button type="button" id="modal-save-btn" class="btn-primary">Yadda saxla</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Arxiv Modal Pəncərəsi -->
+<div id="archive-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-content" style="max-width: 500px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3>Arxivlənmiş Qaimələr</h3>
+            <button type="button" id="archive-modal-close" style="background: none; border: none; color: #fff; font-size: 20px; cursor: pointer;">✕</button>
+        </div>
+        <input type="text" id="archive-search-input" placeholder="Arxivdə axtar..." />
+        <div id="archive-list-container" style="max-height: 300px; overflow-y: auto;">
+            <!-- Arxiv siyahısı buraya yüklənəcək -->
+        </div>
+    </div>
+</div>
+
+<!-- Şablon Seçimi Üçün Peşəkar Modal Pəncərə -->
+<div id="custom-select-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-content" style="max-width: 450px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #3a506b; padding-bottom: 10px;">
+            <h3 style="margin: 0; font-size: 18px;">Şablon Seçin</h3>
+            <button type="button" id="custom-modal-close" style="background: none; border: none; color: #fff; font-size: 20px; cursor: pointer;">✕</button>
+        </div>
+        <input type="text" id="template-search-input" placeholder="Şablonlarda axtar..." autocomplete="off" />
+        <div id="template-list-container" style="max-height: 350px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;">
+            <!-- Şablonlar bura dinamik yüklənəcək -->
+        </div>
+    </div>
+</div>
+
+    <script type="module" src="./app.js?v=35"></script>
+    <script src="./html2canvas.min.js"></script>
+    <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then((reg) => console.log('Service Worker qeydiyyatdan keçdi:', reg.scope))
+        .catch((err) => console.log('Service Worker xətası:', err));
+    });
+  }
+</script>
+</body>
+</html>
