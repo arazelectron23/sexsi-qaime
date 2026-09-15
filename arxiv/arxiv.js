@@ -139,13 +139,15 @@ function renderArchiveUI(list) {
                 const itemTotal = price * qty;
                 invoiceTotal += itemTotal;
 
-                // Məhsul adlarına görə yoxlama və ayrı toplama
-                const itemNameLower = (item.name || item.title || '').trim().toLowerCase();
-                if (itemNameLower === 'yol xerci') {
-                    totalYolSum += itemTotal;
-                } else if (itemNameLower === 'xidmet haqqi') {
-                    totalXidmetSum += itemTotal;
-                }
+                // ---> BURANI DƏYİŞDİRİN <---
+const itemNameLower = (item.name || item.title || '').trim().toLowerCase();
+
+// Həm "yol xerci" (böyük/kiçik hərf fərqi olmadan), həm də "xidmet" / "xidmət" sözlərini əhatə edirik
+if (itemNameLower.includes('yol xerci')) {
+    totalYolSum += itemTotal;
+} else if (itemNameLower.includes('xidmet') || itemNameLower.includes('xidmət')) {
+    totalXidmetSum += itemTotal;
+}
             });
         }
         totalSum += invoiceTotal;
